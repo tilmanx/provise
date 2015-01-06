@@ -67,13 +67,13 @@ command :ipa do |c|
 		end
 
 		say "Replacing provisioning profile" unless options.quiet
-		system "cp #{@provisioning_path} #{@app_filename}/embedded.mobileprovision"
+		system "cp #{@provisioning_path} #{@app_filename.shellescape}/embedded.mobileprovision"
 
 		say "Replacing existing signatures" unless options.quiet
 		if File.exist? "#{@app_filename}/ResourceRules.plist"
-			system "/usr/bin/codesign -f -s \"#{@certificate_name}\" #{@entitlement_parameter} --resource-rules #{@app_filename}/ResourceRules.plist #{@app_filename}"
+			system "/usr/bin/codesign -f -s \"#{@certificate_name}\" #{@entitlement_parameter} --resource-rules #{@app_filename.shellescape}/ResourceRules.plist #{@app_filename.shellescape}"
 		else
-			system "/usr/bin/codesign -f -s \"#{@certificate_name}\" #{@entitlement_parameter} #{@app_filename}"
+			system "/usr/bin/codesign -f -s \"#{@certificate_name}\" #{@entitlement_parameter} #{@app_filename.shellescape}"
 		end
 
 		new_ipa_file = "#{@ipa_filename}.resigned.ipa"
